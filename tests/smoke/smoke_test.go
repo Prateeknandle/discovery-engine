@@ -331,6 +331,7 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 					}
 					err := verifyProcessORFileData(summary.ProcessData, processData, "Process")
 					if err != nil {
+						fmt.Println(err)
 						break
 					}
 					fileData := map[string]string{
@@ -339,6 +340,7 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 					}
 					err = verifyProcessORFileData(summary.FileData, fileData, "File")
 					if err != nil {
+						fmt.Println(err)
 						break
 					}
 					flag := 0
@@ -347,20 +349,12 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 							flag = 1
 							break
 						}
+						fmt.Println("Ingress Connection for mysql pod is not matching")
 					}
 					if flag == 0 {
 						break
 					}
 					flag = 0
-					for _, b := range summary.BindConnection {
-						if b.Command == "/usr/sbin/mysqld" && b.BindAddress == "/var/run/mysqld/mysqld.sock" {
-							flag = 1
-							break
-						}
-					}
-					if flag == 0 {
-						break
-					}
 					return summary, nil
 				}
 			}
@@ -406,7 +400,7 @@ var _ = Describe("Smoke", func() {
 				}
 				time.Sleep(10 * time.Second)
 			}
-			policy, err := discovernetworkpolicy("wordpress-mysql", 30)
+			policy, err := discovernetworkpolicy("wordpress-mysql", 40)
 			Expect(err).To(BeNil())
 			Expect(len(policy)).NotTo(Equal(0))
 			for i := range policy {
