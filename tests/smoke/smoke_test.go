@@ -335,7 +335,6 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 						break
 					}
 					fileData := map[string]string{
-						"/dev/null":                          "/bin/bash",
 						"/lib/x86_64-linux-gnu/libc-2.24.so": "/usr/bin/mysql",
 					}
 					err = verifyProcessORFileData(summary.FileData, fileData, "File")
