@@ -216,7 +216,9 @@ func discoversyspolicy(ns string, l string, rules []string, maxcnt int) (types.K
 		if err != nil {
 			log.Error().Msgf("Failed to apply the `karmor discover` command : %v", err)
 		}
-		fmt.Println("KubeArmor Security Policy :\n", string(cmd))
+		if cnt == 10 {
+			fmt.Println("KubeArmor Security Policy :\n", string(cmd))
+		}
 		err = json.Unmarshal(cmd, &policy)
 		if err != nil {
 			log.Error().Msgf("Failed to unmarshal the system policy : %v", err)
@@ -243,7 +245,10 @@ func discovernetworkpolicy(ns string, maxcnt int) ([]nv1.NetworkPolicy, error) {
 		}
 
 		yamls := strings.Split(string(cmd), "---")
-		fmt.Println("Network Policies : \n", yamls)
+		if cnt == 10 {
+			fmt.Println("Network Policies : \n", yamls)
+		}
+
 		if len(yamls) > 0 {
 			yamls = yamls[:len(yamls)-1]
 		}
@@ -333,8 +338,8 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 					return summ, nil
 				} else if podName == "mysql" {
 					processData := map[string]string{
-						"/bin/date":      "/bin/bash",
-						"/usr/bin/mysql": "/bin/bash",
+						"/bin/date":        "/bin/bash",
+						"/usr/sbin/mysqld": "/bin/bash",
 					}
 					err := verifyProcessORFileData(summ.ProcessData, processData, "Process")
 					if err != nil {
@@ -365,7 +370,7 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 				}
 			}
 		}
-		time.Sleep(20 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 	return nil, err
 }
@@ -397,7 +402,7 @@ var _ = Describe("Smoke", func() {
 		It("testing for network policy", func() {
 			//check whether wordpress service is running or not using curl command
 			for i := 0; i < 10; i++ {
-				_, err := exec.Command("curl", "-d", "WORDPRESS_DB_HOST=mysql", "-d", "WORDPRESS_DB_PASSWORD=root-password", "-d", "redirect_to=http://localhost:8000/wp-admin/", "-d", "testcookie=1", "http://localhost:8000/wp-admin/install.php").Output()
+				_, err := exec.Command("curl", "-X", "POST", "-d", `WORDPRESS_DB_HOST="mysql"`, "-d", `WORDPRESS_DB_PASSWORD="root-password"`, "-d", `wp-submit="Log In"`, "-d", `redirect_to="http://localhost:30080/wp-admin/"`, "-d", "testcookie=1", "http://localhost:30080/wp-admin/install.php").Output()
 				if err != nil {
 					log.Error().Msgf("Failed to apply curl command : %v", err)
 				}
@@ -406,7 +411,7 @@ var _ = Describe("Smoke", func() {
 				}
 				time.Sleep(10 * time.Second)
 			}
-			policy, err := discovernetworkpolicy("wordpress-mysql", 5)
+			policy, err := discovernetworkpolicy("wordpress-mysql", 10)
 			Expect(err).To(BeNil())
 			Expect(len(policy)).NotTo(Equal(0))
 			for i := range policy {
