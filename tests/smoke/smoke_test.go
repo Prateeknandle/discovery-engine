@@ -303,6 +303,7 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 			res = append(res, r)
 		}
 		for _, summ = range res {
+			fmt.Printf("Summary : %v", summ)
 			if strings.Contains(summ.PodName, podName) {
 				if podName == "wordpress" {
 					processData := map[string]string{
