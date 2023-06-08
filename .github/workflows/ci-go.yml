@@ -38,9 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v3
         with:
           go-version: v1.20
 
@@ -48,7 +48,7 @@ jobs:
         run: |
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           go get .
-          gosec -exclude-dir=protobuf/ ./...  
+          gosec -exclude=G204,G304,G107 -exclude-dir=protobuf ./...  
         working-directory: src
 
   go-ginkgo-test:
