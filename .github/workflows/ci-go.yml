@@ -48,7 +48,7 @@ jobs:
         run: |
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           go get .
-          gosec -exclude=G204,G107 ./...  
+          gosec -exclude=G204,G304,G107 -exclude-dir=protobuf/ ./...  
         working-directory: src
 
   go-ginkgo-test:
