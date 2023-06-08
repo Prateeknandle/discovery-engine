@@ -173,14 +173,14 @@ func checkPod(name string, ant string, ns string) {
 
 var _ = BeforeSuite(func() {
 	// install discovery-engine
-	_, err := util.Kubectl(fmt.Sprintf("apply -f https://raw.githubusercontent.com/kubearmor/discovery-engine/dev/deployments/k8s/deployment.yaml"))
-	Expect(err).To(BeNil())
+	// _, err := util.Kubectl(fmt.Sprintf("apply -f https://raw.githubusercontent.com/kubearmor/discovery-engine/dev/deployments/k8s/deployment.yaml"))
+	// Expect(err).To(BeNil())
 	// check discovery-engine pod status
 	checkPod("discovery-engine-",
 		"container.apparmor.security.beta.kubernetes.io/discovery-engine: localhost/kubearmor-accuknox-agents-discovery-engine-discovery-engine", "accuknox-agents")
 
 	//install wordpress-mysql app
-	err = util.K8sApply([]string{"res/wordpress-mysql-deployment.yaml"})
+	err := util.K8sApply([]string{"res/wordpress-mysql-deployment.yaml"})
 	Expect(err).To(BeNil())
 	//check wordpress pod status
 	checkPod("wordpress-",
@@ -303,7 +303,7 @@ func getsummary(podName string, maxcnt int) (*opb.Response, error) {
 			res = append(res, r)
 		}
 		for _, summ = range res {
-			fmt.Printf("Summary : %v", summ)
+			//fmt.Printf("Summary : %v", summ)
 			if strings.Contains(summ.PodName, podName) {
 				if podName == "wordpress" {
 					processData := map[string]string{
@@ -404,7 +404,7 @@ var _ = Describe("Smoke", func() {
 		It("testing for network policy", func() {
 			//check whether wordpress service is running or not using curl command
 			for i := 0; i < 10; i++ {
-				_, err := exec.Command("curl", "-X", "POST", "-d", `WORDPRESS_DB_HOST="mysql"`, "-d", `WORDPRESS_DB_PASSWORD="root-password"`, "-d", `wp-submit="Log In"`, "-d", `redirect_to="http://localhost:30080/wp-admin/"`, "-d", "testcookie=1", "http://localhost:30080/wp-admin/install.php").Output()
+				_, err := exec.Command("curl", "-X", "POST", "-d", `WORDPRESS_DB_HOST="mysql"`, "-d", `WORDPRESS_DB_PASSWORD="root-password"`, "-d", `wp-submit="Log In"`, "-d", `redirect_to="http://localhost:30080/wp-admin/"`, "-d", `"testcookie=1"`, "http://localhost:30080/wp-admin/install.php").Output()
 				if err != nil {
 					log.Error().Msgf("Failed to apply curl command : %v", err)
 				}
@@ -424,7 +424,7 @@ var _ = Describe("Smoke", func() {
 			}
 		})
 		It("testing summary output for wordpress pod", func() {
-			summary, err := getsummary("wordpress", 10)
+			summary, err := getsummary("wordpress", 20)
 			Expect(err).To(BeNil())
 			Expect(summary).NotTo(BeNil())
 			Expect(summary.ClusterName).To(Equal("default"))
@@ -433,7 +433,7 @@ var _ = Describe("Smoke", func() {
 			Expect(summary.ContainerName).To(Equal("wordpress"))
 		})
 		It("testing summary output for mysql pod", func() {
-			summary, err := getsummary("mysql", 10)
+			summary, err := getsummary("mysql", 20)
 			Expect(err).To(BeNil())
 			Expect(summary).NotTo(BeNil())
 			Expect(summary.ClusterName).To(Equal("default"))
