@@ -1484,6 +1484,7 @@ func StartSystemLogRcvr() {
 		} else if cfg.GetCfgSystemLogFrom() == "feed-consumer" {
 			fc.ConsumerMutex.Lock()
 			fc.StartConsumer()
+
 			fc.ConsumerMutex.Unlock()
 		}
 		time.Sleep(time.Second * 2)
