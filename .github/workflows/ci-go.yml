@@ -71,10 +71,13 @@ jobs:
           curl -sfL http://get.kubearmor.io/ | sudo sh -s -- -b /usr/local/bin
           karmor install
 
+      - name: Build Discovery Engine
+        run: |
+          GITHUB_SHA=$GITHUB_SHA ./src/build/build_knoxautopolicy.sh
+          
       - name: Run Discovery Engine
         run: |
-          pwd
-
+          docker images
 
       - name: Install Ginkgo
         run: |
