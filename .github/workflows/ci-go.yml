@@ -52,7 +52,7 @@ jobs:
         working-directory: src
 
   go-ginkgo-test:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
         uses: actions/checkout@v2
