@@ -52,13 +52,15 @@ jobs:
         working-directory: src
 
   go-ginkgo-test:
-    runs-on: ubuntu-latest
+    name: Ginkgo-testing Framework / ${{ matrix.os }} / ${{ matrix.runtime }}
+    runs-on: ${{ matrix.os }}
     env:
       RUNTIME: ${{ matrix.runtime }}
     strategy:
       fail-fast: false
       matrix:
-        runtime: ["docker", "containerd", "crio"]
+        os: [ubuntu-20.04]
+        runtime: ["containerd", "docker", "crio"]
     steps:
       - name: Checkout Source
         uses: actions/checkout@v2
@@ -89,8 +91,9 @@ jobs:
             if [ ${{ matrix.runtime }} == "crio" ]; then
               sudo podman pull accuknox/knoxautopolicy:latest
             fi
+            
           fi
-          kubectl wait --for=condition=ready --timeout=5m -n accuknox-agents pod 
+          kubectl wait --for=condition=ready --timeout=5m -n accuknox-agents pod -l app
           kubectl get pods -A
 
       - name: Install Ginkgo
