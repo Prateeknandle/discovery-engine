@@ -7,7 +7,8 @@ AUTOPOL_SRC_HOME=$AUTOPOL_HOME/src
 
 # check version
 
-VERSION=`git rev-parse --abbrev-ref HEAD`
+#VERSION=`git rev-parse --abbrev-ref HEAD`
+VERSION=latest
 
 if [ ! -z $1 ]; then
     VERSION=$1
