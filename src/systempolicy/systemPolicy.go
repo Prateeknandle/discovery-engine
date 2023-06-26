@@ -1085,7 +1085,7 @@ func PopulateSystemPoliciesFromSystemLogs(sysLogMap map[types.KnoxSystemLog]bool
 
 	// delete duplicate logs
 	sysLogs := cleanseSystemLog(sysLogMap)
-
+	log.Printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
 	// get cluster names, iterate each cluster
 	clusteredLogs := clusteringSystemLogsByCluster(sysLogs)
 
