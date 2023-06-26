@@ -586,6 +586,7 @@ func GetKubearmorRelayURL() string {
 	if client == nil {
 		return ""
 	}
+	log.Printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
 	// get kubearmor-relay pod from k8s api client
 	pods, err := client.CoreV1().Pods("").List(context.Background(), metav1.ListOptions{
