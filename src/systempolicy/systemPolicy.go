@@ -2,6 +2,7 @@ package systempolicy
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -1085,6 +1086,8 @@ func PopulateSystemPoliciesFromSystemLogs(sysLogMap map[types.KnoxSystemLog]bool
 
 	// delete duplicate logs
 	sysLogs := cleanseSystemLog(sysLogMap)
+	fmt.Printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
+
 	log.Printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
 	// get cluster names, iterate each cluster
 	clusteredLogs := clusteringSystemLogsByCluster(sysLogs)
