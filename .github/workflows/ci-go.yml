@@ -83,7 +83,6 @@ jobs:
       - name: Run Discovery Engine
         run: |
           kubectl apply -f ./src/build/test.yaml
-          kubectl wait --for=condition=ready --timeout=5m -n accuknox-agents pod -l app=discovery-engine
           kubectl get pods -A
 
       - name: Install Ginkgo
