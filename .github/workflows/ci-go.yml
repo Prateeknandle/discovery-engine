@@ -71,6 +71,11 @@ jobs:
           curl -sfL http://get.kubearmor.io/ | sudo sh -s -- -b /usr/local/bin
           karmor install
 
+      - name: Run Discovery Engine
+        run: |
+          pwd
+
+
       - name: Install Ginkgo
         run: |
           go install -mod=mod github.com/onsi/ginkgo/v2/ginkgo
